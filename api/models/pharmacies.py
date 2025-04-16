@@ -1,9 +1,9 @@
-from datetime import datetime
 from config import db
+from datetime import datetime
 
 class Pharmacy(db.Model):
     __tablename__ = 'pharmacies'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     phone_number = db.Column(db.String(200), nullable=True)
@@ -11,12 +11,20 @@ class Pharmacy(db.Model):
     license_number = db.Column(db.String(100), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
-    # One-to-many relationship with users
+
     users = db.relationship('User', backref='pharmacy', lazy=True)
-    
-    # Many-to-many relationship with Patients
-    patients = db.relationship('Patient', secondary='patients_pharmacies', back_populates='pharmacies')
+
+    pharmacy_prescriptions = db.relationship(
+        'PharmacyPrescription',
+        back_populates='pharmacy',
+        cascade='all, delete-orphan'
+    )
+    prescriptions = db.relationship(
+        'Prescription',
+        secondary='pharmacy_prescriptions',
+        back_populates='pharmacies',
+        overlaps="pharmacy_prescriptions,pharmacy"
+    )
 
     def to_dict(self):
         return {

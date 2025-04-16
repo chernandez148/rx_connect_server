@@ -15,8 +15,7 @@ class Patient(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    # Many-to-many relationship with Pharmacy through PatientsPharmacy
-    pharmacies = db.relationship('Pharmacy', secondary='patients_pharmacies', back_populates='patients')
+    prescriptions = db.relationship('Prescription', back_populates='patient')  # ✅ Added this line
 
     def to_dict(self):
         return {
@@ -30,7 +29,6 @@ class Patient(db.Model):
             'address': self.address,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
-            'pharmacies': [pharmacy.id for pharmacy in self.pharmacies]  # Add pharmacy IDs to the response
         }
 
     def __repr__(self):

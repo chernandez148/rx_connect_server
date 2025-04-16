@@ -3,16 +3,19 @@ from routes.index_routes import index_bp
 from routes.pharmacy_routes import pharmacy_bp
 from routes.user_routes import user_bp
 from routes.patient_routes import patient_bp
+from routes.prescription_routes import prescription_bp
 
 from models.pharmacies import Pharmacy
 from models.users import User
 from models.patients import Patient
+from models.prescriptions import Prescription
 
 def create_app():
     app.register_blueprint(index_bp)
     app.register_blueprint(pharmacy_bp) 
     app.register_blueprint(user_bp)
     app.register_blueprint(patient_bp)
+    app.register_blueprint(prescription_bp)
         
     return app
 

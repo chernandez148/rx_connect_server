@@ -3,7 +3,6 @@ from flask_restful import Resource
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 from models.patients import Patient
-from models.patients_pharmacies import PatientsPharmacy
 from models.pharmacies import Pharmacy
 from config import db
 import re
@@ -13,7 +12,7 @@ class CreatePatient(Resource):
         data = request.get_json()
 
         # Required fields check
-        required_fields = ['pharmacy_ids', 'first_name', 'last_name', 'dob', 'sex']
+        required_fields = ['first_name', 'last_name', 'dob', 'sex']
         missing_fields = [field for field in required_fields if field not in data]
         if missing_fields:
             return make_response({'error': f'Missing required fields: {", ".join(missing_fields)}'}, 400)
@@ -41,23 +40,6 @@ class CreatePatient(Resource):
             db.session.add(new_patient)
             db.session.commit()
 
-            # Now, associate the patient with multiple pharmacies
-            pharmacy_ids = data['pharmacy_ids']  # List of pharmacy IDs
-            pharmacies = Pharmacy.query.filter(Pharmacy.id.in_(pharmacy_ids)).all()
-
-            if len(pharmacies) != len(pharmacy_ids):  # If some pharmacy IDs are not found
-                return make_response({'error': 'One or more pharmacies not found.'}, 404)
-
-            # Create association in the PatientsPharmacy table for each pharmacy
-            for pharmacy in pharmacies:
-                patient_pharmacy_association = PatientsPharmacy(
-                    patient_id=new_patient.id,
-                    pharmacy_id=pharmacy.id
-                )
-                db.session.add(patient_pharmacy_association)
-
-            db.session.commit()
-
             return make_response({
                 'message': 'New patient added successfully',
                 'patient': new_patient.to_dict()
@@ -66,7 +48,7 @@ class CreatePatient(Resource):
         except IntegrityError as e:
             db.session.rollback()
             current_app.logger.error(f"IntegrityError: {e}")
-            return make_response({'error': 'User with this email address already exists.'}, 409)
+            return make_response({'error': 'Patient with this email address already exists.'}, 409)
 
         except Exception as e:
             db.session.rollback()
