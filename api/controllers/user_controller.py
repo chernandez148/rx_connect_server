@@ -4,8 +4,8 @@ from flask import request, current_app, make_response
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 from models.users import User
+from werkzeug.security import generate_password_hash
 from config import db
-import bcrypt
 import re
 
 class CreateUser(Resource):
@@ -23,7 +23,7 @@ class CreateUser(Resource):
 
         email = data['email'].lower()
         username = data['username'].lower()
-        hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        hashed_password = generate_password_hash(data['password'])
 
         try:
             new_user = User(

@@ -12,8 +12,11 @@ class Pharmacy(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    users = db.relationship('User', backref='pharmacy', lazy=True)
-
+    users = db.relationship(
+        'User', 
+        back_populates='pharmacy_rel',
+        lazy=True
+    )
     pharmacy_prescriptions = db.relationship(
         'PharmacyPrescription',
         back_populates='pharmacy',

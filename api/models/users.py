@@ -31,6 +31,8 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    pharmacy_rel = db.relationship("Pharmacy", back_populates="users", lazy=True)
+
     def to_dict(self):
         return {
             'id': self.id,

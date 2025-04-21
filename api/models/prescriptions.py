@@ -13,6 +13,7 @@ class Prescription(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     patient = db.relationship('Patient', back_populates='prescriptions')
+    transfers = db.relationship('Transfer', back_populates='prescription', lazy=True)
 
     pharmacy_prescriptions = db.relationship(
         'PharmacyPrescription',
