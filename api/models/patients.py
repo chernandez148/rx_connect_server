@@ -1,7 +1,9 @@
+#server/api/models/patients.py
 from datetime import datetime
 from config import db
+from .serializer import SerializerMixin
 
-class Patient(db.Model):
+class Patient(db.Model, SerializerMixin):
     __tablename__ = 'patients'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -15,21 +17,22 @@ class Patient(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    prescriptions = db.relationship('Prescription', back_populates='patient')  # ✅ Added this line
+    # Relationships
+    prescriptions = db.relationship('Prescription', back_populates='patient')
+    pharmacy_patients = db.relationship(
+        'PharmacyPatients',
+        back_populates='patient',
+        cascade='all, delete-orphan'
+    )
+    pharmacies = db.relationship(
+        'Pharmacy',
+        secondary='pharmacy_patients',
+        back_populates='patients',
+        viewonly=True
+    )
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'first_name': self.first_name,
-            'last_name': self.last_name,
-            'dob': self.dob,
-            'sex': self.sex,
-            'phone_number': self.phone_number,
-            'email': self.email,
-            'address': self.address,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
-        }
+    SERIALIZE_EXCLUDE = ['pharmacies']
+    SERIALIZE_INCLUDE = ['prescriptions']
 
     def __repr__(self):
         return f"<Patient {self.first_name} {self.last_name}>"

@@ -20,7 +20,7 @@ def create_app():
     app.register_blueprint(patient_bp)
     app.register_blueprint(prescription_bp)
     app.register_blueprint(transfer_bp)
-    app.register_blueprint(auth_bp)  # <-- Fixed typo here
+    app.register_blueprint(auth_bp) 
     return app
 
 app = create_app()

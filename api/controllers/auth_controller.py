@@ -23,28 +23,21 @@ class Login(Resource):
         if not user or not check_password_hash(user.password, data['password']):
             return {"msg": "Bad email or password"}, 401
 
-        pharmacy = Pharmacy.query.filter_by(id=user.pharmacy_id).first()
-
-        # Use Marshmallow to serialize the user and pharmacy
+        # Create the serializer instances
         user_schema = UserSchema()
-        pharmacy_schema = PharmacySchema()
-
+        
+        # Serialize the user (which will include pharmacy via the nested schema)
         user_data = user_schema.dump(user)
-        pharmacy_data = pharmacy_schema.dump(pharmacy) if pharmacy else None
 
         access_token = create_access_token(
             identity=user.id,
             expires_delta=timedelta(hours=1)
         )
 
-        print(pharmacy_data)  # Debugging step to confirm serialization
-
         return {
             "access_token": access_token,
-            "user": user_data,
-            "pharmacy": pharmacy_data  # Include pharmacy details
+            "user": user_data  # Now includes pharmacy info in the user object
         }, 200
-
 
 class Logout(Resource):
     @jwt_required()

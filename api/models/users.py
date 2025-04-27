@@ -1,23 +1,18 @@
+#server/api/models/users.py
 from datetime import datetime
 from config import db
 from enum import Enum
-from sqlalchemy.dialects.postgresql import ENUM  # Only if using PostgreSQL
+from sqlalchemy.dialects.postgresql import ENUM
+from .serializer import SerializerMixin
 
 class UserRole(Enum):
     ADMIN = 'admin'
-    OWNER = 'owner'
-    PHARMACY_MANAGER = 'pharmacy_manager'
-    OPERATIONS_MANAGER = 'operations_manager'
-    HR_MANAGER = 'hr_manager'
-    PHARMACIST_IN_CHARGE = 'pharmacist_in_charge'
     PHARMACIST = 'pharmacist'
-    STAFF_PHARMACIST = 'staff_pharmacist'
-    INTERN_PHARMACIST = 'intern_pharmacist'
-    PHARMACY_TECHNICIAN = 'pharmacy_technician'
+    TECHNICIAN = 'technician'
 
 role_enum = ENUM(UserRole, name="user_role", create_type=True)
 
-class User(db.Model):
+class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -31,20 +26,10 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    pharmacy_rel = db.relationship("Pharmacy", back_populates="users", lazy=True)
+    pharmacy = db.relationship("Pharmacy", back_populates="users")
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'pharmacy_id': self.pharmacy_id,
-            'first_name': self.first_name,
-            'last_name': self.last_name,
-            'username': self.username,
-            'email': self.email,
-            'role': self.role.value if self.role else None,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None
-        }
+    SERIALIZE_EXCLUDE = ['password']
+    SERIALIZE_INCLUDE = ['pharmacy']
 
     def __repr__(self):
         return f"<User {self.username}>"

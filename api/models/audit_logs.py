@@ -1,7 +1,9 @@
+#server/api/models/audit_logs.py
 from datetime import datetime
 from config import db
+from .serializer import SerializerMixin
 
-class AuditLog(db.Model):
+class AuditLog(db.Model, SerializerMixin):
     __tablename__ = 'audit_logs'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -10,6 +12,9 @@ class AuditLog(db.Model):
     target_id = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(500), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
+
+    SERIALIZE_EXCLUDE = []
+    SERIALIZE_INCLUDE = []
+
     def __repr__(self):
-        return f"<Audit Log for action {self.action_type}>"
+        return f"<AuditLog {self.action_type}>"

@@ -1,5 +1,8 @@
+#server/api/models/transfers.py
+
 from datetime import datetime
 from config import db
+from .serializer import SerializerMixin
 from enum import Enum
 from sqlalchemy.dialects.postgresql import ENUM  # If using PostgreSQL
 
@@ -11,7 +14,7 @@ class TransferStatus(Enum):
 
 status_enum = ENUM(TransferStatus, name="transfer_status", create_type=True)
 
-class Transfer(db.Model):
+class Transfer(db.Model, SerializerMixin):
     __tablename__ = 'transfers'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -44,25 +47,11 @@ class Transfer(db.Model):
     from_pharmacy = db.relationship('Pharmacy', foreign_keys=[from_pharmacy_id])
     to_pharmacy = db.relationship('Pharmacy', foreign_keys=[to_pharmacy_id])
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "prescription_id": self.prescription_id,
-            "from_pharmacy_id": self.from_pharmacy_id,
-            "to_pharmacy_id": self.to_pharmacy_id,
-            "patient_first_name": self.patient_first_name,
-            "patient_last_name": self.patient_last_name,
-            "patient_dob": self.patient_dob.isoformat(),
-            "patient_phone_number": self.patient_phone_number,
-            "medication_name": self.medication_name,
-            "transfer_status": self.transfer_status.value,
-            "requested_by": self.requested_by,
-            "requested_at": self.requested_at.isoformat() if self.requested_at else None,
-            "completed_by": self.completed_by,
-            "completed_at": self.completed_at.isoformat() if self.completed_at else None,
-            "created_at": self.created_at.isoformat(),
-            "updated_at": self.updated_at.isoformat()
-        }
+    requester = db.relationship('User', foreign_keys=[requested_by])
+    completer = db.relationship('User', foreign_keys=[completed_by])
+
+    SERIALIZE_EXCLUDE = ['prescription_id', 'from_pharmacy_id', 'to_pharmacy_id', 'requested_by', 'completed_by']   
+    SERIALIZE_INCLUDE = ['prescription', 'from_pharmacy', 'to_pharmacy', 'requester', 'completer']
 
     def __repr__(self):
         return f"<Transfer request for {self.medication_name} from pharmacy {self.from_pharmacy_id} to {self.to_pharmacy_id}>"

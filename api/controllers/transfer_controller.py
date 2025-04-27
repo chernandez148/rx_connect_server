@@ -93,6 +93,20 @@ class GetTransfersByPharmacyID(Resource):
             current_app.logger.error(f"Error: {e}")
             return make_response({'error': 'Internal server error'}, 500)
 
+class GetTransferByID(Resource):
+    def get(self, transfer_id):
+        try:
+            transfer = Transfer.query.get(transfer_id)
+
+            if not transfer:
+                return make_response({'error': 'Transfer not found'}, 404)
+
+            return make_response({'transfer': transfer.to_dict()}, 200)
+
+        except Exception as e:
+            current_app.logger.error(f"Error retrieving transfer by ID: {e}")
+            return make_response({'error': 'Internal server error'}, 500)
+
 class UpdateTransfer(Resource):
     def patch(self, transfer_id):
         data = request.get_json()

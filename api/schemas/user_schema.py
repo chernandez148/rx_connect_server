@@ -12,3 +12,4 @@ class UserSchema(Schema):
     created_at = fields.DateTime()
     updated_at = fields.DateTime()
     pharmacy = fields.Nested(PharmacySchema)  # Nested pharmacy schema
+    

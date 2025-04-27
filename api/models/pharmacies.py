@@ -1,7 +1,9 @@
+#server/api/models/phamracies.py
 from config import db
 from datetime import datetime
+from .serializer import SerializerMixin
 
-class Pharmacy(db.Model):
+class Pharmacy(db.Model, SerializerMixin):
     __tablename__ = 'pharmacies'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -12,33 +14,15 @@ class Pharmacy(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    users = db.relationship(
-        'User', 
-        back_populates='pharmacy_rel',
-        lazy=True
-    )
-    pharmacy_prescriptions = db.relationship(
-        'PharmacyPrescription',
-        back_populates='pharmacy',
-        cascade='all, delete-orphan'
-    )
-    prescriptions = db.relationship(
-        'Prescription',
-        secondary='pharmacy_prescriptions',
-        back_populates='pharmacies',
-        overlaps="pharmacy_prescriptions,pharmacy"
-    )
+    # Relationships
+    users = db.relationship('User', back_populates='pharmacy')
+    pharmacy_prescriptions = db.relationship('PharmacyPrescription', back_populates='pharmacy')
+    prescriptions = db.relationship('Prescription', secondary='pharmacy_prescriptions', back_populates='pharmacies')
+    pharmacy_patients = db.relationship('PharmacyPatients', back_populates='pharmacy')
+    patients = db.relationship('Patient', secondary='pharmacy_patients', back_populates='pharmacies')
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'phone_number': self.phone_number,
-            'address': self.address,
-            'license_number': self.license_number,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
-        }
+    SERIALIZE_EXCLUDE = ['users', 'prescriptions', 'pharmacy_prescriptions', 'pharmacy_patients']
+    SERIALIZE_INCLUDE = []  # No need to include anything extra
 
     def __repr__(self):
         return f"<Pharmacy {self.name}>"
