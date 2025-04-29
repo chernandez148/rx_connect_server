@@ -19,7 +19,6 @@ app.instance_path = None  # Critical for Vercel serverless
 
 # Configure Stripe API key and other environment variables
 app.config['DOMAIN_URL'] = os.environ.get('DOMAIN_URL')
-app.config['BACKUP_URL'] = os.environ.get('BACKUP_URL')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
@@ -51,13 +50,4 @@ jwt = JWTManager(app)
 jwt.token_in_blocklist_loader(is_token_revoked)
 
 # CORS configuration
-# Get allowed origins from environment or default to localhost
-allowed_origins = os.environ.get('DOMAIN_URL', 'BACKUP_URL')
-
-# Convert string to list if multiple origins are needed
-if ',' in allowed_origins:
-    allowed_origins = [origin.strip() for origin in allowed_origins.split(',')]
-
-CORS(app, 
-     resources={r"/*": {"origins": allowed_origins}},
-     supports_credentials=True)  # If using cookies/auth
+CORS(app, resources={r"/*": {"origins": os.environ.get('DOMAIN_URL')}})
