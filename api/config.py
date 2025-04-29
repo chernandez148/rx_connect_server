@@ -50,4 +50,13 @@ jwt = JWTManager(app)
 jwt.token_in_blocklist_loader(is_token_revoked)
 
 # CORS configuration
-CORS(app, resources={r"/*": {"origins": os.environ.get('DOMAIN_URL')}})
+# Get allowed origins from environment or default to localhost
+allowed_origins = os.environ.get('DOMAIN_URL', 'http://localhost:3000')
+
+# Convert string to list if multiple origins are needed
+if ',' in allowed_origins:
+    allowed_origins = [origin.strip() for origin in allowed_origins.split(',')]
+
+CORS(app, 
+     resources={r"/*": {"origins": allowed_origins}},
+     supports_credentials=True)  # If using cookies/auth
