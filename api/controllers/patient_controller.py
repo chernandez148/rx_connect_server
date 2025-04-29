@@ -3,10 +3,10 @@ from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
-from config import db
+from api.config import db
 import re
 
-from models import Patient, Pharmacy, User, Prescription, PharmacyPatients ,PharmacyPrescription
+from api.models import Patient, Pharmacy, User, Prescription, PharmacyPatients ,PharmacyPrescription
 
 class CreatePatient(Resource):
     def post(self):

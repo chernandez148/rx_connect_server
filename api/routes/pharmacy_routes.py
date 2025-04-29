@@ -1,7 +1,7 @@
 # server/api/routes/pharmacy_routes.py
 
 from flask import Blueprint
-from controllers.pharmacy_controller import CreatePharmacy, GetPharmacies
+from api.controllers.pharmacy_controller import CreatePharmacy, GetPharmacies
 from flask_restful import Api
 
 pharmacy_bp = Blueprint('pharmacy_bp', __name__)

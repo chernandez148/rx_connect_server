@@ -1,7 +1,7 @@
 # server/api/routes/index_routes.py
 
 from flask import Blueprint
-from controllers.index_controller import Index
+from api.controllers.index_controller import Index
 from flask_restful import Api
 
 index_bp = Blueprint('index_bp', __name__)

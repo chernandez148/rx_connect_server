@@ -1,7 +1,7 @@
 # server/api/routes/prescription_routes.py
 
 from flask import Blueprint
-from controllers.transfer_controller import CreateTransfer, GetTransfersByPharmacyID, GetTransferByID, UpdateTransfer
+from api.controllers.transfer_controller import CreateTransfer, GetTransfersByPharmacyID, GetTransferByID, UpdateTransfer
 from flask_restful import Api
 
 transfer_bp = Blueprint('transfer_bp', __name__)

@@ -2,9 +2,9 @@ from flask import request, current_app, make_response
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
-from models.transfers import Transfer, TransferStatus
-from models.pharmacies import Pharmacy
-from config import db
+from api.models.transfers import Transfer, TransferStatus
+from api.models.pharmacies import Pharmacy
+from api.config import db
 
 
 class CreateTransfer(Resource):

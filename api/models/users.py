@@ -1,6 +1,6 @@
 #server/api/models/users.py
 from datetime import datetime
-from config import db
+from api.config import db
 from enum import Enum
 from sqlalchemy.dialects.postgresql import ENUM
 from .serializer import SerializerMixin

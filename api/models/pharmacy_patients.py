@@ -1,5 +1,5 @@
 #server/api/models/pharmacy_patients.py
-from config import db
+from api.config import db
 from .serializer import SerializerMixin
 
 class PharmacyPatients(db.Model, SerializerMixin):

@@ -1,7 +1,7 @@
 #server/api/models/messages.py
 
 from datetime import datetime
-from config import db
+from api.config import db
 from .serializer import SerializerMixin
 
 class Message(db.Model, SerializerMixin):

@@ -1,7 +1,7 @@
 #server/api/models/transfers.py
 
 from datetime import datetime
-from config import db
+from api.config import db
 from .serializer import SerializerMixin
 from enum import Enum
 from sqlalchemy.dialects.postgresql import ENUM  # If using PostgreSQL

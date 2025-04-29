@@ -5,12 +5,12 @@ from flask_jwt_extended import (
     create_access_token, jwt_required, get_jwt
 )
 from datetime import timedelta
-from models.users import User
-from models.pharmacies import Pharmacy  # Ensure Pharmacy model is imported
-from utils.blacklist import token_blacklist
+from api.models.users import User
+from api.models.pharmacies import Pharmacy  # Ensure Pharmacy model is imported
+from api.utils.blacklist import token_blacklist
 from marshmallow import Schema, fields
-from schemas.pharmacy_schema import PharmacySchema
-from schemas.user_schema import UserSchema  # Assuming UserSchema is defined in schemas/user_schema.py
+from api.schemas.pharmacy_schema import PharmacySchema
+from api.schemas.user_schema import UserSchema  # Assuming UserSchema is defined in schemas/user_schema.py
 
 class Login(Resource):
     def post(self):

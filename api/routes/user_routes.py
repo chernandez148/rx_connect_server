@@ -1,7 +1,7 @@
 # server/api/routes/user_routes.py
 
 from flask import Blueprint
-from controllers.user_controller import CreateUser, GetUsersByPharmacyID
+from api.controllers.user_controller import CreateUser, GetUsersByPharmacyID
 from flask_restful import Api
 
 user_bp = Blueprint('user_bp', __name__)

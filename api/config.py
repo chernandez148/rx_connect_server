@@ -9,7 +9,7 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 from sqlalchemy import MetaData
 from flask_jwt_extended import JWTManager
-from utils.blacklist import is_token_revoked
+from api.utils.blacklist import is_token_revoked
 from datetime import timedelta
 
 from dotenv import load_dotenv

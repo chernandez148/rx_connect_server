@@ -1,5 +1,5 @@
 from marshmallow import Schema, fields
-from schemas.pharmacy_schema import PharmacySchema
+from api.schemas.pharmacy_schema import PharmacySchema
 
 class UserSchema(Schema):
     id = fields.Int()

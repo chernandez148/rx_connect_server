@@ -3,9 +3,9 @@
 from flask import request, current_app, make_response
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
-from models.users import User
+from api.models.users import User
 from werkzeug.security import generate_password_hash
-from config import db
+from api.config import db
 import re
 
 class CreateUser(Resource):

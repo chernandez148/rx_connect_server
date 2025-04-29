@@ -2,10 +2,10 @@ from flask import request, current_app, make_response
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
-from models.prescriptions import Prescription  # Make sure this exists
-from models.pharmacy_prescriptions import PharmacyPrescription
-from models.pharmacies import Pharmacy
-from config import db
+from api.models.prescriptions import Prescription  # Make sure this exists
+from api.models.pharmacy_prescriptions import PharmacyPrescription
+from api.models.pharmacies import Pharmacy
+from api.config import db
 
 class CreatePrescription(Resource):
     def post(self):

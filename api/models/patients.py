@@ -1,6 +1,6 @@
 #server/api/models/patients.py
 from datetime import datetime
-from config import db
+from api.config import db
 from .serializer import SerializerMixin
 
 class Patient(db.Model, SerializerMixin):

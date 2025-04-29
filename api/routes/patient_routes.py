@@ -1,7 +1,7 @@
 # server/api/routes/patient_routes.py
 
 from flask import Blueprint
-from controllers.patient_controller import CreatePatient, PatchPatientByID,GetPatientsByPharmacyID, GetPatientByID
+from api.controllers.patient_controller import CreatePatient, PatchPatientByID,GetPatientsByPharmacyID, GetPatientByID
 from flask_restful import Api
 
 patient_bp = Blueprint('patient_bp', __name__)

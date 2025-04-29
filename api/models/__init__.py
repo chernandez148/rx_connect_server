@@ -1,5 +1,5 @@
 # models/__init__.py
-from config import db
+from api.config import db
 
 from .pharmacies import Pharmacy
 from .patients import Patient

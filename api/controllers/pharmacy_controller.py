@@ -3,8 +3,8 @@
 from flask import request, current_app, make_response
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
-from models.pharmacies import Pharmacy 
-from config import db
+from api.models.pharmacies import Pharmacy 
+from api.config import db
 
 class CreatePharmacy(Resource):
     def post(self):

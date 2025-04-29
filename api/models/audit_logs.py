@@ -1,6 +1,6 @@
 #server/api/models/audit_logs.py
 from datetime import datetime
-from config import db
+from api.config import db
 from .serializer import SerializerMixin
 
 class AuditLog(db.Model, SerializerMixin):

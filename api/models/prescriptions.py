@@ -1,5 +1,5 @@
 # server/api/models/prescriptions.py
-from config import db
+from api.config import db
 from datetime import datetime
 from .serializer import SerializerMixin
 
