@@ -3,7 +3,7 @@
     "builds": [
       {
         "src": "api/app.py",
-        "use": "@vercel/go"
+        "use": "@vercel/python"
       }
     ],
     "routes": [
