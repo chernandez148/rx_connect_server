@@ -75,4 +75,18 @@ class GetUsersByPharmacyID(Resource):
             }
         }, 200)
 
-
+class GetUserByID(Resource):
+    def get(self, user_id):
+        try:
+            user = User.query.get(user_id)
+            
+            if not user:
+                return make_response({'error': 'User not found'}, 404)
+                
+            return make_response({
+                'user': user.to_dict()
+            }, 200)
+            
+        except Exception as e:
+            current_app.logger.error(f"Unexpected Error: {e}")
+            return make_response({'error': 'Internal server error'}, 500)
