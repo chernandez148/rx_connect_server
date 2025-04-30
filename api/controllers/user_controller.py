@@ -90,3 +90,66 @@ class GetUserByID(Resource):
         except Exception as e:
             current_app.logger.error(f"Unexpected Error: {e}")
             return make_response({'error': 'Internal server error'}, 500)
+
+class PatchUserByID(Resource):
+    def patch(self, user_id):
+        data = request.get_json()
+        
+        if not data:
+            return make_response({'error': 'No data provided for update'}, 400)
+            
+        try:
+            user = User.query.get(user_id)
+            
+            if not user:
+                return make_response({'error': 'User not found'}, 404)
+            
+            # List of allowed fields that can be updated
+            allowed_fields = {
+                'first_name', 'last_name', 'username', 'email', 'role', 'password'
+            }
+            
+            # Check for any invalid fields in the request
+            invalid_fields = set(data.keys()) - allowed_fields
+            if invalid_fields:
+                return make_response({
+                    'error': f'Invalid fields for update: {", ".join(invalid_fields)}'
+                }, 400)
+            
+            # Update email if provided
+            if 'email' in data:
+                if not re.match(r"[^@]+@[^@]+\.[^@]+", data['email']):
+                    return make_response({'error': 'Invalid email format.'}, 400)
+                user.email = data['email'].lower()
+            
+            # Update username if provided
+            if 'username' in data:
+                user.username = data['username'].lower()
+            
+            # Update password if provided (hash it first)
+            if 'password' in data:
+                user.password = generate_password_hash(data['password'])
+            
+            # Update other fields
+            for field in ['first_name', 'last_name', 'role']:
+                if field in data:
+                    setattr(user, field, data[field])
+            
+            db.session.commit()
+            
+            return make_response({
+                'message': 'User updated successfully',
+                'user': user.to_dict()
+            }, 200)
+            
+        except IntegrityError as e:
+            db.session.rollback()
+            current_app.logger.error(f"IntegrityError: {e}")
+            return make_response({
+                'error': 'Database integrity error (possibly duplicate email or username)'
+            }, 409)
+            
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Unexpected Error: {e}")
+            return make_response({'error': 'Internal server error'}, 500)
