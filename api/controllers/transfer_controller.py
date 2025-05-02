@@ -135,8 +135,9 @@ class UpdateTransfer(Resource):
                 'doctor_contact': None,
                 'transfer_status': self._validate_transfer_status,
                 'requested_by': None,
-                'requested_at': '%Y-%m-%dT%H:%M:%S',  # DateTime format
-                'completed_at': '%Y-%m-%dT%H:%M:%S'   # DateTime format
+                'requested_at': '%Y-%m-%dT%H:%M:%S',
+                'completed_at': '%Y-%m-%dT%H:%M:%S',
+                'completed_by': None
             }
 
             for field, format_spec in updatable_fields.items():
