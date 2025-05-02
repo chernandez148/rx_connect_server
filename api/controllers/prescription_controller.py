@@ -12,7 +12,7 @@ class CreatePrescription(Resource):
         data = request.get_json()
 
         # Required fields check
-        required_fields = ['patient_id', 'medication', 'dosage', 'quantity', 'pharmacy_ids']
+        required_fields = ['patient_id', 'medication', 'dosage', 'quantity', 'is_controlled', 'pharmacy_ids']
         missing_fields = [field for field in required_fields if field not in data]
         if missing_fields:
             return make_response({'error': f'Missing required fields: {", ".join(missing_fields)}'}, 400)
@@ -28,6 +28,7 @@ class CreatePrescription(Resource):
                 refills=data.get('refills', None),  # Optional, will be None if not provided
                 date_of_prescription=data.get('date_of_prescription', None),  # Optional, will be None if not provided
                 date_last_filled=data.get('date_last_filled', None),  # Optional, will be None if not provided
+                is_controlled=data['is_controlled'],
                 prescriber_full_name=data.get('prescriber_full_name', None),  # Optional, will be None if not provided
                 prescriber_dea_number=data.get('prescriber_dea_number', None),  # Optional, will be None if not provided
                 prescriber_contact_info=data.get('prescriber_contact_info', None),  # Optional, will be None if not provided
@@ -134,6 +135,8 @@ class UpdatePrescription(Resource):
                 prescription.refills = data['refills']
             if 'directions_for_use' in data:
                 prescription.directions_for_use = data['directions_for_use']
+            if 'is_controlled' in data:
+                prescription.is_controlled = data['is_controlled']
             if 'date_of_prescription' in data:
                 # Ensure the date format is correct before saving
                 prescription.date_of_prescription = datetime.strptime(data['date_of_prescription'], '%Y-%m-%d').date() if data['date_of_prescription'] else None
