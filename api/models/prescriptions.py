@@ -15,6 +15,7 @@ class Prescription(db.Model, SerializerMixin):
     refills = db.Column(db.Integer, nullable=True)  # New
     date_of_prescription = db.Column(db.Date, nullable=True)  # New
     date_last_filled = db.Column(db.Date, nullable=True)  # New
+    is_controlled = db.Column(db.Boolean, nullable=False, default=False)
     prescriber_full_name = db.Column(db.String(200), nullable=True)  # New
     prescriber_dea_number = db.Column(db.String(50), nullable=True)  # New
     prescriber_contact_info = db.Column(db.String(200), nullable=True)  # New
