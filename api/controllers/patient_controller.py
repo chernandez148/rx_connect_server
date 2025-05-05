@@ -3,16 +3,16 @@ from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
-from config import db
-import re
-import bleach
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+import re
+import bleach
 
+from config import db
 from models import Patient, Pharmacy, User, Prescription, PharmacyPatients, PharmacyPrescription
 from decorators.role_check import requires_permission
 from schemas import PatientSchema, PatientUpdateSchema
-from utils.audit_log import log_audit_event
+from controllers.audit_log_controller import log_audit_event
 
 # Initialize rate limiter
 limiter = Limiter(
