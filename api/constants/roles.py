@@ -3,7 +3,7 @@ Centralized role definitions for the pharmacy application
 """
 
 ROLE_HIERARCHY = {
-    'SuperAdmin': 5,   # Full system access (IT/developer level)
+    'Admin': 5,   # Full system access (IT/developer level)
     'PharmacyManager': 4,  # Replaces generic 'Admin' for pharmacy-specific oversight
     'Pharmacist': 3,   # Clinical authority (final verification rights)
     'Technician': 2,   # Restricted editing (no overrides)
@@ -12,24 +12,24 @@ ROLE_HIERARCHY = {
 
 PERMISSIONS = {
     # User Management
-    'view_all_users': ['SuperAdmin'],
-    'view_pharmacy_users': ['SuperAdmin', 'PharmacyManager', 'Pharmacist'],
-    'create_user': ['SuperAdmin', 'PharmacyManager'],
-    'edit_user': ['SuperAdmin', 'PharmacyManager'],
-    'delete_user': ['SuperAdmin'],  # Rarely permitted for audit purposes
+    'view_all_users': ['Admin'],
+    'view_pharmacy_users': ['Admin', 'PharmacyManager', 'Pharmacist'],
+    'create_user': ['Admin', 'PharmacyManager'],
+    'edit_user': ['Admin', 'PharmacyManager'],
+    'delete_user': ['Admin'],  # Rarely permitted for audit purposes
     
     # Patient Data
-    'add_patient': ['SuperAdmin', 'PharmacyManager', 'Pharmacist', 'Technician'],
-    'view_patient': ['SuperAdmin', 'PharmacyManager', 'Pharmacist', 'Technician', 'Clerk'],
+    'add_patient': ['Admin', 'PharmacyManager', 'Pharmacist', 'Technician'],
+    'view_patient': ['Admin', 'PharmacyManager', 'Pharmacist', 'Technician', 'Clerk'],
     'edit_patient': {
-        'allowed_roles': ['SuperAdmin', 'PharmacyManager', 'Pharmacist', 'Technician'],
+        'allowed_roles': ['Admin', 'PharmacyManager', 'Pharmacist', 'Technician'],
         'restricted_fields': {
             'Technician': ['dob', 'sex'],  # Requires pharmacist review
             'Pharmacist': [],  # Full access
             'PharmacyManager': []  # Full access
         }
     },
-    'delete_patient': ['SuperAdmin', 'PharmacyManager'],  # Requires audit trail
+    'delete_patient': ['Admin', 'PharmacyManager'],  # Requires audit trail
     
     # Prescriptions
     'create_prescription': {
@@ -53,7 +53,7 @@ PERMISSIONS = {
     'cancel_transfer': ['Pharmacist', 'PharmacyManager'],
     
     # System
-    'view_audit_logs': ['PharmacyManager', 'SuperAdmin'],
+    'view_audit_logs': ['PharmacyManager', 'Admin'],
     'export_data': ['Pharmacist', 'PharmacyManager'],  # HIPAA-protected
     'override_restrictions': ['Pharmacist']  # Emergency edits (logged)
 }
